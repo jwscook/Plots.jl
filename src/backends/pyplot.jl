@@ -1398,7 +1398,7 @@ for (mime, fmt) in (
         fig."canvas"."print_figure"(
             io,
             format=$fmt,
-            # bbox_inches = "tight",
+            bbox_inches = "tight",
             # figsize = map(px2inch, plt[:size]),
             facecolor = fig."get_facecolor"(),
             edgecolor = "none",
