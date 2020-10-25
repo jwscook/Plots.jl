@@ -929,7 +929,7 @@ function _before_layout_calcs(plt::Plot{PyPlotBackend})
                 # pad = axes_grid1.axes_size.Fraction(0.5, width)  # Colorbar is spaced 0.5 of its size away from the ax
                 # cbax = divider.append_axes("right", size=width, pad=pad)   # This approach does not work well in subplots
                 colorbar_position = "right"
-                colorbar_pad = "2.5%"
+                colorbar_pad = "1%"
                 colorbar_orientation="vertical"
 
                 if sp[:colorbar] == :left
@@ -945,7 +945,7 @@ function _before_layout_calcs(plt::Plot{PyPlotBackend})
                     colorbar_orientation="horizontal"
                 end
 
-                cbax = divider.append_axes(colorbar_position, size="5%", pad=colorbar_pad)  # Reasonable value works most of the usecases
+                cbax = divider.append_axes(colorbar_position, size="1.6%", pad=colorbar_pad)  # Reasonable value works most of the usecases
                 cb = fig."colorbar"(handle; cax=cbax, orientation = colorbar_orientation, kw...)
 
                 if sp[:colorbar] == :left
