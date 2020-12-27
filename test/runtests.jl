@@ -4,10 +4,11 @@ using Plots
 using Random
 using StableRNGs
 using Test
+using TestImages
 using FileIO
 using Gtk
 using LibGit2
-import GeometryTypes, GeometryBasics
+import GeometryBasics
 using Dates
 using RecipesBase
 
@@ -30,10 +31,12 @@ end # testset
 include("test_defaults.jl")
 include("test_axes.jl")
 include("test_axis_letter.jl")
+include("test_components.jl")
+include("test_shorthands.jl")
+include("integration_dates.jl")
 include("test_recipes.jl")
 include("test_hdf5plots.jl")
 include("test_pgfplotsx.jl")
-include("integration_dates.jl")
 
 reference_dir(args...) = joinpath(homedir(), ".julia", "dev", "PlotReferenceImages", args...)
 
@@ -130,7 +133,7 @@ const IMG_TOL = VERSION < v"1.4" && Sys.iswindows() ? 1e-1 : is_ci() ? 1e-2 : 1e
         @test isa(p, Plots.Plot) == true
         @test isa(display(p), Nothing) == true
         p = plot([Dates.Date(2019, 1, 1), Dates.Date(2019, 2, 1)], [3, 4])
-        annotate!(p, [(Dates.Date(2019, 1, 15), 3.2, Plots.text("Test", :red, :center))])
+        annotate!(p, [(Dates.Date(2019, 1, 15), 3.2, :auto)])
         hline!(p, [3.1])
         @test isa(p, Plots.Plot) == true
         @test isa(display(p), Nothing) == true
@@ -199,7 +202,6 @@ end
               [(missing,missing)], [(missing,missing,missing),("a","b","c")])
     for z in zipped
         @test isequal(collect(zip(Plots.unzip(z)...)), z)
-        @test isequal(collect(zip(Plots.unzip(GeometryTypes.Point.(z))...)), z)
         @test isequal(collect(zip(Plots.unzip(GeometryBasics.Point.(z))...)), z)
     end
     op1 = Plots.process_clims((1.0, 2.0))

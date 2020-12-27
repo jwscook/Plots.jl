@@ -94,6 +94,12 @@ function attr!(axis::Axis, args...; kw...)
                 for vi in v
                     discrete_value!(axis, vi)
                 end
+            #could perhaps use TimeType here, as Date and DateTime are both subtypes of TimeType
+            # or could perhaps check if dateformatter or datetimeformatter is in use
+            elseif k == :lims && isa(v, Tuple{Date,Date})
+                plotattributes[k] = (v[1].instant.periods.value, v[2].instant.periods.value)
+            elseif k == :lims && isa(v, Tuple{DateTime,DateTime})
+                plotattributes[k] = (v[1].instant.periods.value, v[2].instant.periods.value)
             else
                 plotattributes[k] = v
             end
@@ -227,8 +233,9 @@ function get_ticks(sp::Subplot, axis::Axis; update = true)
                 if !isempty(dvals)
                     # discrete ticks...
                     n = length(dvals)
-                    rng = if ticks == :auto
-                        Int[round(Int,i) for i in range(1, stop=n, length=min(n,15))]
+                    rng = if ticks == :auto && n > 15
+                        Δ = ceil(Int, n / 10)
+                        Δ:Δ:n
                     else # if ticks == :all
                         1:n
                     end

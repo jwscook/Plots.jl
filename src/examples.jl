@@ -1055,16 +1055,51 @@ const _examples = PlotExample[
         f(x,a) = 1/x + a*x^2
         xs = collect(0.1:0.05:2.0);
         as = collect(0.2:0.1:2.0);
-        
+
         x_grid = [x for x in xs for y in as];
         a_grid = [y for x in xs for y in as];
-        
+
         plot(x_grid, a_grid, f.(x_grid,a_grid),
             st = :surface,
             xlabel = "longer xlabel",
             ylabel = "longer ylabel",
             zlabel = "longer zlabel",
         )
+        end]
+    ),
+    PlotExample( # 51
+        "Images with custom axes",
+        "",
+        [quote
+            using Plots
+            using TestImages
+            img = testimage("lighthouse")
+
+            # plot the image reversing the first dimension and setting yflip = false
+            plot([-π, π], [-1, 1], reverse(img, dims=1), yflip=false, aspect_ratio=:none)
+            # plot other data
+            plot!(sin, -π, π, lw=3, color=:red)
+        end]
+    ),
+    PlotExample(
+        "3d quiver",
+        "",
+        [quote
+            using Plots
+
+            ϕs = range(-π, π, length=50)
+            θs = range(0, π, length=25)
+            θqs = range(1, π-1, length=25)
+
+            x = vec([sin(θ) * cos(ϕ) for (ϕ, θ) in Iterators.product(ϕs, θs)])
+            y = vec([sin(θ) * sin(ϕ) for (ϕ, θ) in Iterators.product(ϕs, θs)])
+            z = vec([cos(θ) for (ϕ, θ) in Iterators.product(ϕs, θs)])
+
+            u = 0.1 * vec([sin(θ) * cos(ϕ) for (ϕ, θ) in Iterators.product(ϕs, θqs)])
+            v = 0.1 * vec([sin(θ) * sin(ϕ) for (ϕ, θ) in Iterators.product(ϕs, θqs)])
+            w = 0.1 * vec([cos(θ) for (ϕ, θ) in Iterators.product(ϕs, θqs)])
+
+            quiver(x,y,z, quiver=(u,v,w))
         end]
     ),
 ]
@@ -1074,8 +1109,8 @@ _animation_examples = [2, 31]
 _backend_skips = Dict(
     :gr => [25, 30, 47],
     :pyplot => [2, 25, 30, 31, 47, 49],
-    :plotlyjs => [2, 21, 24, 25, 30, 31, 49],
-    :plotly => [2, 21, 24, 25, 30, 31, 49],
+    :plotlyjs => [2, 21, 24, 25, 30, 31, 49, 51],
+    :plotly => [2, 21, 24, 25, 30, 31, 49, 51],
     :pgfplotsx => [
         2, # animation
         6, # images
@@ -1084,6 +1119,7 @@ _backend_skips = Dict(
         31, # animation
         32, # spy
         49, # polar heatmap
+        51, # image with custom axes
     ],
 )
 
