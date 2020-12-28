@@ -1405,7 +1405,8 @@ for (mime, fmt) in (
             # figsize = map(px2inch, plt[:size]),
             facecolor = fig."get_facecolor"(),
             edgecolor = "none",
-            dpi = plt[:dpi]
+            dpi = plt[:dpi],
+            rasterized = true
         )
     end
 end
